@@ -2,8 +2,8 @@ import './App.css';
 import groceriesData from './data/groceriesData'
 import { Component }from 'react'
 import Navbar from './components/Navbar'
-import ProductsList from './components/ProducstList' 
-import Form from './components/Form'
+import ProductsList from './components/ProductsList' 
+ 
 
 class App extends Component {
   state = {
@@ -11,12 +11,13 @@ class App extends Component {
     item: '',
     brand: '',
     units: '',
-    quantity: 1
+    quantity: 0,
+    isPurchased: false
 
   }
 
   handleChange = (event) => {
-    this.setState({ [event.target.id] : event.target.value } )
+    this.setState({ [event.target.id] : event.target.value })
   }
   
   handleSubmit = (event) => {
@@ -37,14 +38,23 @@ this.setState({
   item: '',
   brand: '',
   units: '',
-  quantity: '',
+  quantity: 0,
   isPurchased: false
  })
 }
 
-handleRemove = (product) => {  // remove item from original array
-   const items = this.state.items.filter(i => i.item !== product.item)
-   this.setState({items}) 
+handleRemove = (item, idx) => {  
+  console.log(item, idx)
+
+   const newArray = this.state.groceriesData.filter((i, index)  => index ===idx)
+
+   const filterArray = this.state.groceriesData.filter((i, index) => index!==idx)
+   //console.log(newArray);
+   newArray[0].isPurchased = true
+   console.log(this.state.groceriesData);
+   this.setState({
+    groceriesData:[...newArray, ...filterArray]
+   }) 
 }
 
 
@@ -53,15 +63,43 @@ render(){
     <div className="App">
       <Navbar text='Groceries List React App'/>
       
-      <Form
-        handleSubmit={this.handleSubmit}
-        handleChange={this.handleChange}
-        item={this.state.item}
-        brand={this.state.brand}
-        units={this.state.units}
-        quantity={this.state.quantity}
-      />
-     <ProductsList products={this.state.items} handleRemove={this.handleRemove} />
+      <form onSubmit={this.handleSubmit}>
+        <label htmlFor='item'>Item Name</label>
+        <input
+          type='text'
+          value={this.state.item}
+          onChange={this.handleChange}
+          id='item'
+        />
+
+        <label htmlFor='brand'>Brand Name</label>
+        <input
+          type='text'
+          value={this.state.brand}
+          onChange={this.handleChange}
+          id='brand'
+        />
+
+        <label htmlFor='units'>Units</label>
+        <input 
+          type='text'
+          value={this.state.units}
+          onChange={this.handleChange}
+          id='units'
+        />  
+
+        <label htmlFor='quantity'>Quantity</label>
+        <input 
+          type='number'
+          value={this.state.quantity}
+          onChange={this.handleChange}
+          id='quantity'
+        />
+
+        <input type="submit" />
+      </form>
+
+      <ProductsList products={this.state.groceriesData} handleRemove={this.handleRemove} />
     </div>
   )
   }

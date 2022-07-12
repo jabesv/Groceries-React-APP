@@ -5,7 +5,8 @@ const ProductItem = (props) => {
             <h2> Item: {item}</h2>
             <h2> Brand: {brand}</h2>
             <h2> Quantity: {quantity} {units}</h2>
-            <button onClick={ () => props.handleRemove(props.product) }>Remove</button>
+        
+            <button onClick={ () => props.handleRemove(props.product, props.idx) }>Remove</button>
         </div>
     )
 } 
